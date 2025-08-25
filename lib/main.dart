@@ -1,7 +1,18 @@
 
+import 'package:atlab/Driving%20License.dart';
+import 'package:atlab/Electricity.dart';
+import 'package:atlab/FBR.dart';
+import 'package:atlab/HomePage.dart';
+import 'package:atlab/OnlineFir.dart';
+import 'package:atlab/Passport.dart';
+import 'package:atlab/Ptcl.dart';
+import 'package:atlab/SUIGAS.dart';
+import 'package:atlab/SimDataPage.dart';
+import 'package:atlab/TrackingParsel.dart';
+import 'package:atlab/VehicleVerification.dart';
+import 'package:atlab/splashScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pak_info/splashScreen.dart';
 
 void main()
 {

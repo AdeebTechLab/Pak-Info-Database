@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
+
+import 'HomePage.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -22,22 +23,26 @@ class _SplashscreenState extends State<Splashscreen>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
 
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.8,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutBack,
+    ));
 
     _controller.forward();
 
-    /// 4 sec baad Home page
     Future.delayed(const Duration(seconds: 4), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-      );
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home()));
     });
   }
 
@@ -62,31 +67,25 @@ class _SplashscreenState extends State<Splashscreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // ✅ Logo
                     Container(
                       width: 130,
                       height: 130,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1E88E5),
+                        color: Colors.blue.shade600,
                         borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
+                        boxShadow: [
                           BoxShadow(
-                            color: Color(0x401E88E5),
+                            color: Colors.blue.shade200,
                             blurRadius: 20,
-                            offset: Offset(0, 8),
+                            offset: const Offset(0, 8),
                           ),
                         ],
                       ),
-                      child: Image.asset(
-                        'assets/images/logo.png', // ✅ logo path
-                        width: 130,
-                        height: 130,
-                      ),
+                      child: Image.asset('Asset/Images/img.png',width: 130,height: 130,)
                     ),
-
                     const SizedBox(height: 24),
                     const Text(
-                      'Pak Info Database', // ✅ App name
+                      'AT Data Base',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w600,
@@ -95,8 +94,9 @@ class _SplashscreenState extends State<Splashscreen>
                       ),
                     ),
                     const SizedBox(height: 8),
+
                     Text(
-                      'All in One E-Service',
+                      'Your One Tap Service',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey.shade600,

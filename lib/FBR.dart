@@ -1,6 +1,7 @@
 
+import 'package:atlab/Web%20view.dart';
+import 'package:atlab/webViewPage.dart';
 import 'package:flutter/material.dart';
-import 'package:pak_info/webViewPage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CheckFBR extends StatefulWidget {

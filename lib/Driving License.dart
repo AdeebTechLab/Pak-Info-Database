@@ -1,5 +1,6 @@
+import 'package:atlab/webViewPage.dart';
 import 'package:flutter/material.dart';
-import 'package:pak_info/webViewPage.dart';
+import 'Web view.dart';
 
 class DrivingLicense extends StatefulWidget {
   const DrivingLicense({super.key});

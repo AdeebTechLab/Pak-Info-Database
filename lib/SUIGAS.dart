@@ -1,5 +1,8 @@
+
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:atlab/webViewPage.dart';
 import 'package:flutter/material.dart';
-import 'package:pak_info/webViewPage.dart';
+import 'package:atlab/Web%20view.dart';
 
 class SuigasBill extends StatefulWidget {
   const SuigasBill({super.key});

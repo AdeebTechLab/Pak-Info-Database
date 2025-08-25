@@ -1,6 +1,7 @@
 
+import 'package:atlab/webViewPage.dart';
 import 'package:flutter/material.dart';
-import 'package:pak_info/webViewPage.dart';
+import 'package:atlab/Web%20view.dart';
 
 class SimData extends StatefulWidget {
   const SimData({super.key});
