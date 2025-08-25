@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pak_info/themeManager.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 enum ViewMode { Mobile, Desktop }
 
@@ -233,17 +235,21 @@ class _WebViewPageState extends State<WebViewPage> {
     }
   }
 
-  Color _getModeColor(ViewMode mode) {
-    return mode == ViewMode.Mobile ? Colors.blue : Colors.orange;
+  Color _getModeColor(ViewMode mode, ThemeManager themeManager) {
+    if (mode == ViewMode.Mobile) {
+      return themeManager.isDarkMode ? Colors.blue.shade400 : Colors.blue;
+    } else {
+      return themeManager.isDarkMode ? Colors.orange.shade400 : Colors.orange;
+    }
   }
 
   IconData _getModeIcon(ViewMode mode) {
     return mode == ViewMode.Mobile ? Icons.smartphone : Icons.desktop_windows;
   }
 
-  Widget _buildErrorPage() {
+  Widget _buildErrorPage(ThemeManager themeManager) {
     return Container(
-      color: Colors.grey[50],
+      color: themeManager.backgroundColor,
       child: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(32),
@@ -261,7 +267,7 @@ class _WebViewPageState extends State<WebViewPage> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[800],
+                  color: themeManager.textColor,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -270,7 +276,7 @@ class _WebViewPageState extends State<WebViewPage> {
                 errorMessage,
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey[600],
+                  color: themeManager.textColor.withOpacity(0.7),
                   height: 1.5,
                 ),
                 textAlign: TextAlign.center,
@@ -280,19 +286,33 @@ class _WebViewPageState extends State<WebViewPage> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.amber[50],
+                    color: themeManager.isDarkMode
+                        ? Colors.amber[900]?.withOpacity(0.2)
+                        : Colors.amber[50],
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.amber[200]!),
+                    border: Border.all(
+                        color: themeManager.isDarkMode
+                            ? Colors.amber[600]!
+                            : Colors.amber[200]!
+                    ),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.info_outline, color: Colors.amber[700], size: 20),
+                      Icon(
+                          Icons.info_outline,
+                          color: themeManager.isDarkMode
+                              ? Colors.amber[400]
+                              : Colors.amber[700],
+                          size: 20
+                      ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           'Try switching to Mobile mode - some websites work better in mobile view',
                           style: TextStyle(
-                            color: Colors.amber[700],
+                            color: themeManager.isDarkMode
+                                ? Colors.amber[400]
+                                : Colors.amber[700],
                             fontSize: 14,
                           ),
                         ),
@@ -310,7 +330,7 @@ class _WebViewPageState extends State<WebViewPage> {
                     icon: const Icon(Icons.refresh, color: Colors.white),
                     label: const Text('Try Again', style: TextStyle(color: Colors.white)),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _getModeColor(currentMode),
+                      backgroundColor: _getModeColor(currentMode, themeManager),
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
@@ -326,14 +346,14 @@ class _WebViewPageState extends State<WebViewPage> {
                     },
                     icon: Icon(
                       currentMode == ViewMode.Desktop ? Icons.smartphone : Icons.arrow_back,
-                      color: _getModeColor(currentMode),
+                      color: _getModeColor(currentMode, themeManager),
                     ),
                     label: Text(
                       currentMode == ViewMode.Desktop ? 'Try Mobile' : 'Go Back',
-                      style: TextStyle(color: _getModeColor(currentMode)),
+                      style: TextStyle(color: _getModeColor(currentMode, themeManager)),
                     ),
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: _getModeColor(currentMode)),
+                      side: BorderSide(color: _getModeColor(currentMode, themeManager)),
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
@@ -347,7 +367,7 @@ class _WebViewPageState extends State<WebViewPage> {
     );
   }
 
-  void _showModeSelector() {
+  void _showModeSelector(ThemeManager themeManager) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -355,7 +375,7 @@ class _WebViewPageState extends State<WebViewPage> {
         return Container(
           margin: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: themeManager.cardColor,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
@@ -366,34 +386,39 @@ class _WebViewPageState extends State<WebViewPage> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: themeManager.textColor.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
-                    Icon(Icons.visibility, color: _getModeColor(currentMode)),
+                    Icon(Icons.visibility, color: _getModeColor(currentMode, themeManager)),
                     const SizedBox(width: 12),
-                    const Text(
+                    Text(
                       'Select View Mode',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: themeManager.textColor,
+                      ),
                     ),
                   ],
                 ),
               ),
               ...ViewMode.values.map((mode) {
                 bool isSelected = currentMode == mode;
+                Color modeColor = _getModeColor(mode, themeManager);
                 return Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: isSelected ? _getModeColor(mode) : Colors.grey[300]!,
+                      color: isSelected ? modeColor : themeManager.textColor.withOpacity(0.3),
                       width: isSelected ? 2 : 1,
                     ),
-                    color: isSelected ? _getModeColor(mode).withOpacity(0.1) : null,
+                    color: isSelected ? modeColor.withOpacity(0.1) : null,
                   ),
                   child: ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -401,27 +426,33 @@ class _WebViewPageState extends State<WebViewPage> {
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        color: _getModeColor(mode).withOpacity(0.1),
+                        color: modeColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Icon(_getModeIcon(mode), color: _getModeColor(mode), size: 24),
+                      child: Icon(_getModeIcon(mode), color: modeColor, size: 24),
                     ),
                     title: Text(
                       mode.name.toUpperCase(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: isSelected ? _getModeColor(mode) : Colors.black87,
+                        color: isSelected ? modeColor : themeManager.textColor,
                       ),
                     ),
                     subtitle: Text(
                       _getDescriptionForMode(mode),
                       style: TextStyle(
-                        color: isSelected ? _getModeColor(mode).withOpacity(0.8) : Colors.grey[600],
+                        color: isSelected
+                            ? modeColor.withOpacity(0.8)
+                            : themeManager.textColor.withOpacity(0.6),
                       ),
                     ),
                     trailing: isSelected
-                        ? Icon(Icons.check_circle, color: _getModeColor(mode), size: 24)
-                        : Icon(Icons.radio_button_unchecked, color: Colors.grey[400], size: 24),
+                        ? Icon(Icons.check_circle, color: modeColor, size: 24)
+                        : Icon(
+                        Icons.radio_button_unchecked,
+                        color: themeManager.textColor.withOpacity(0.4),
+                        size: 24
+                    ),
                     onTap: () {
                       _switchMode(mode);
                       Navigator.pop(context);
@@ -449,9 +480,11 @@ class _WebViewPageState extends State<WebViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeManager = Provider.of<ThemeManager>(context);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: themeManager.primaryColor,
         title: Text(
           "${currentMode.name.toLowerCase()} View",
           style: const TextStyle(color: Colors.white, fontSize: 16),
@@ -466,7 +499,7 @@ class _WebViewPageState extends State<WebViewPage> {
             icon: const Icon(Icons.refresh, color: Colors.white),
           ),
           IconButton(
-            onPressed: _showModeSelector,
+            onPressed: () => _showModeSelector(themeManager),
             icon: const Icon(Icons.more_vert, color: Colors.white),
           ),
         ],
@@ -474,19 +507,22 @@ class _WebViewPageState extends State<WebViewPage> {
       body: Stack(
         children: [
           if (!hasError) WebViewWidget(controller: controller),
-          if (hasError) _buildErrorPage(),
+          if (hasError) _buildErrorPage(themeManager),
           if (isLoading && !hasError)
             Container(
-              color: Colors.white,
+              color: themeManager.backgroundColor,
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircularProgressIndicator(color: _getModeColor(currentMode)),
+                    CircularProgressIndicator(color: _getModeColor(currentMode, themeManager)),
                     const SizedBox(height: 16),
                     Text(
                       'Loading ${currentMode.name} view...',
-                      style: TextStyle(color: _getModeColor(currentMode), fontSize: 16),
+                      style: TextStyle(
+                          color: _getModeColor(currentMode, themeManager),
+                          fontSize: 16
+                      ),
                     ),
                   ],
                 ),

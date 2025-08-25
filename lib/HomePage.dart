@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pak_info/OnlineFir.dart';
 import 'package:pak_info/Ptcl.dart';
+import 'package:pak_info/themeManager.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Import all pages
@@ -38,114 +40,203 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final themeManager = Provider.of<ThemeManager>(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Determine if we should use grid layout (for tablets/wider screens)
+    final bool useGridLayout = screenWidth > 600;
+    final int crossAxisCount = screenWidth > 900 ? 4 : 3;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue.shade800,
         title: const Text(
           "Pak Info Database V 1.0.0",
-          style: TextStyle(fontSize: 20, color: Colors.white),
+          style: TextStyle(fontSize: 20),
         ),
         actions: [
-          PopupMenuTheme(
-            data: PopupMenuThemeData(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(11),
-              ),
+          IconButton(
+            icon: Icon(
+              themeManager.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              size: 28,
             ),
-            child: PopupMenuButton<String>(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.white,
-                size: 28,
-              ),
-              onSelected: (String value) {
-                if (value == 'About') {
-                  launchLink('https://salmanadeeb.wixsite.com/pak-info-database');
-                } else if (value == 'ContactWhatsApp') {
-                  launchLink('https://wa.me/+923092333121');
-                }
-              },
-              itemBuilder: (BuildContext context) => [
-                const PopupMenuItem<String>(
-                  value: 'About',
-                  child: ListTile(
-                    leading: Icon(Icons.info, color: Colors.black, size: 25),
-                    title: Text(
-                      "App Update",
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
+            onPressed: () => themeManager.toggleTheme(),
+          ),
+          PopupMenuButton<String>(
+            icon: const Icon(
+              Icons.menu,
+              size: 28,
+            ),
+            onSelected: (String value) {
+              if (value == 'About') {
+                launchLink('https://salmanadeeb.wixsite.com/pak-info-database');
+              } else if (value == 'ContactWhatsApp') {
+                launchLink('https://wa.me/+923092333121');
+              }
+            },
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem<String>(
+                value: 'About',
+                child: ListTile(
+                  leading: Icon(Icons.info, color: themeManager.textColor, size: 25),
+                  title: Text(
+                    "App Update",
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: themeManager.textColor,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-                const PopupMenuItem<String>(
-                  value: 'ContactWhatsApp',
-                  child: ListTile(
-                    leading: Icon(FontAwesomeIcons.whatsapp,
-                        color: Colors.green, size: 22),
-                    title: Text(
-                      "Contact WhatsApp",
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
+              ),
+              PopupMenuItem<String>(
+                value: 'ContactWhatsApp',
+                child: ListTile(
+                  leading: const Icon(FontAwesomeIcons.whatsapp,
+                      color: Colors.green, size: 22),
+                  title: Text(
+                    "Contact WhatsApp",
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: themeManager.textColor,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
 
       /// BODY START
-      body: SingleChildScrollView(
-        child: Container(
-          color: Colors.grey.shade100,
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              _makeContainer("Asset/Images/sim.jpg", "Sim Owner info", const SimData(), Colors.black),
-              const SizedBox(height: 20),
+      body: useGridLayout ? _buildGridView(themeManager, crossAxisCount) : _buildListView(themeManager),
+    );
+  }
 
-              _makeContainer("Asset/Images/Driving Licese.png", "Driving License info", const DrivingLicense(), Colors.black),
-              const SizedBox(height: 20),
+  /// Build Grid View for wider screens
+  Widget _buildGridView(ThemeManager themeManager, int crossAxisCount) {
+    final items = _getMenuItems();
 
-              _makeContainer("Asset/Images/online fir.jpg", "Online FIR info", const OnlineFire(), Colors.black),
-              const SizedBox(height: 20),
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          childAspectRatio: 0.75,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+        ),
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return _makeGridContainer(
+            item['imagePath']!,
+            item['title']!,
+            item['page']! as Widget,
+            themeManager,
+          );
+        },
+      ),
+    );
+  }
 
-              _makeContainer("Asset/Images/ntn.jpg", "NTN Inquiry info", const CheckFBR(), Colors.black),
-              const SizedBox(height: 20),
+  /// Build List View for mobile screens
+  Widget _buildListView(ThemeManager themeManager) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: [
+            _makeContainer("Asset/Images/sim.jpg", "Sim Owner info", const SimData(), themeManager),
+            const SizedBox(height: 20),
 
-              _makeContainer("Asset/Images/Vehicle.png.png", "Vehicle Verification info", const CheckVehicleverification(), Colors.black),
-              const SizedBox(height: 20),
+            _makeContainer("Asset/Images/Driving Licese.png", "Driving License info", const DrivingLicense(), themeManager),
+            const SizedBox(height: 20),
 
-              _makeContainer("Asset/Images/Passport 2.jpg", "Passport Inquiry info", const CheckPassport(), Colors.black),
-              const SizedBox(height: 20),
+            _makeContainer("Asset/Images/online fir.jpg", "Online FIR info", const OnlineFire(), themeManager),
+            const SizedBox(height: 20),
 
-              _makeContainer("Asset/Images/ElectricBill.jpg", "Electricity Bill info", const ElectricityBill(), Colors.black),
-              const SizedBox(height: 20),
+            _makeContainer("Asset/Images/ntn.jpg", "NTN Inquiry info", const CheckFBR(), themeManager),
+            const SizedBox(height: 20),
 
-              _makeContainer("Asset/Images/Suigas.jpg", "Sui Gas Bill info", const SuigasBill(), Colors.black),
-              const SizedBox(height: 20),
+            _makeContainer("Asset/Images/Vehicle.png.png", "Vehicle Verification info", const CheckVehicleverification(), themeManager),
+            const SizedBox(height: 20),
 
-              _makeContainer("Asset/Images/ptcl.jpg", "Internet Bill info", const PtclBill(), Colors.black),
-              const SizedBox(height: 20),
+            _makeContainer("Asset/Images/Passport 2.jpg", "Passport Inquiry info", const CheckPassport(), themeManager),
+            const SizedBox(height: 20),
 
-              _makeContainer("Asset/Images/package tracking.jpg", "Parcel Tracking info", const CheckTrackingparsel(), Colors.black),
+            _makeContainer("Asset/Images/ElectricBill.jpg", "Electricity Bill info", const ElectricityBill(), themeManager),
+            const SizedBox(height: 20),
 
-            ],
-          ),
+            _makeContainer("Asset/Images/Suigas.jpg", "Sui Gas Bill info", const SuigasBill(), themeManager),
+            const SizedBox(height: 20),
+
+            _makeContainer("Asset/Images/ptcl.jpg", "Internet Bill info", const PtclBill(), themeManager),
+            const SizedBox(height: 20),
+
+            _makeContainer("Asset/Images/package tracking.jpg", "Parcel Tracking info", const CheckTrackingparsel(), themeManager),
+          ],
         ),
       ),
     );
   }
 
-  /// Reusable Card Widget
-  Widget _makeContainer(
-      String imagePath, String imageTitle, Widget targetPage, Color borderColor) {
+  /// Get menu items list
+  List<Map<String, dynamic>> _getMenuItems() {
+    return [
+      {
+        'imagePath': "Asset/Images/sim.jpg",
+        'title': "Sim Owner info",
+        'page': const SimData(),
+      },
+      {
+        'imagePath': "Asset/Images/Driving Licese.png",
+        'title': "Driving License info",
+        'page': const DrivingLicense(),
+      },
+      {
+        'imagePath': "Asset/Images/online fir.jpg",
+        'title': "Online FIR info",
+        'page': const OnlineFire(),
+      },
+      {
+        'imagePath': "Asset/Images/ntn.jpg",
+        'title': "NTN Inquiry info",
+        'page': const CheckFBR(),
+      },
+      {
+        'imagePath': "Asset/Images/Vehicle.png.png",
+        'title': "Vehicle Verification info",
+        'page': const CheckVehicleverification(),
+      },
+      {
+        'imagePath': "Asset/Images/Passport 2.jpg",
+        'title': "Passport Inquiry info",
+        'page': const CheckPassport(),
+      },
+      {
+        'imagePath': "Asset/Images/ElectricBill.jpg",
+        'title': "Electricity Bill info",
+        'page': const ElectricityBill(),
+      },
+      {
+        'imagePath': "Asset/Images/Suigas.jpg",
+        'title': "Sui Gas Bill info",
+        'page': const SuigasBill(),
+      },
+      {
+        'imagePath': "Asset/Images/ptcl.jpg",
+        'title': "Internet Bill info",
+        'page': const PtclBill(),
+      },
+      {
+        'imagePath': "Asset/Images/package tracking.jpg",
+        'title': "Parcel Tracking info",
+        'page': const CheckTrackingparsel(),
+      },
+    ];
+  }
+
+  /// Reusable Card Widget for List View
+  Widget _makeContainer(String imagePath, String imageTitle, Widget targetPage, ThemeManager themeManager) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -156,17 +247,17 @@ class _HomeState extends State<Home> {
         width: double.infinity,
         child: Card(
           elevation: 8,
-          shadowColor: borderColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          clipBehavior: Clip.antiAlias,
+          shadowColor: Colors.black,
           child: Column(
             children: [
               Container(
                 height: 200,
                 width: double.infinity,
                 decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
                   image: DecorationImage(
                     image: AssetImage(imagePath),
                     fit: BoxFit.fill,
@@ -176,7 +267,13 @@ class _HomeState extends State<Home> {
               Container(
                 padding: const EdgeInsets.all(10),
                 width: double.infinity,
-                color: Colors.blue.shade800,
+                decoration: BoxDecoration(
+                  color: themeManager.containerColor,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                ),
                 child: Text(
                   imageTitle,
                   style: const TextStyle(
@@ -187,6 +284,66 @@ class _HomeState extends State<Home> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  /// Reusable Card Widget for Grid View
+  Widget _makeGridContainer(String imagePath, String imageTitle, Widget targetPage, ThemeManager themeManager) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => targetPage));
+      },
+      child: Card(
+        elevation: 8,
+        shadowColor: Colors.black,
+        child: Column(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                  image: DecorationImage(
+                    image: AssetImage(imagePath),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: themeManager.containerColor,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    imageTitle,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

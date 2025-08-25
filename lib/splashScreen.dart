@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:pak_info/themeManager.dart';
 
 import 'HomePage.dart';
 
@@ -42,7 +44,8 @@ class _SplashscreenState extends State<Splashscreen>
     _controller.forward();
 
     Future.delayed(const Duration(seconds: 4), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const Home()));
     });
   }
 
@@ -54,8 +57,10 @@ class _SplashscreenState extends State<Splashscreen>
 
   @override
   Widget build(BuildContext context) {
+    final themeManager = Provider.of<ThemeManager>(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: themeManager.backgroundColor,
       body: Center(
         child: AnimatedBuilder(
           animation: _controller,
@@ -71,35 +76,38 @@ class _SplashscreenState extends State<Splashscreen>
                       width: 130,
                       height: 130,
                       decoration: BoxDecoration(
-                        color: Colors.blue.shade600,
+                        color: themeManager.primaryColor,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.blue.shade200,
+                            color: themeManager.primaryColor.withOpacity(0.4),
                             blurRadius: 20,
                             offset: const Offset(0, 8),
                           ),
                         ],
                       ),
-                      child: Image.asset('Asset/Images/logo.png',width: 130,height: 130,)
+                      child: Image.asset(
+                        'Asset/Images/logo.png',
+                        width: 130,
+                        height: 130,
+                      ),
                     ),
                     const SizedBox(height: 24),
-                    const Text(
+                    Text(
                       'AT Data Base',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF2D3748),
+                        color: themeManager.textColor,
                         letterSpacing: 0.5,
                       ),
                     ),
                     const SizedBox(height: 8),
-
                     Text(
                       'Your One Tap Service',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.grey.shade600,
+                        color: themeManager.textColor.withOpacity(0.7),
                         fontWeight: FontWeight.w400,
                       ),
                     ),

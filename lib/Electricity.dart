@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
+import 'package:pak_info/themeManager.dart';
 import 'package:pak_info/webViewPage.dart';
+import 'package:provider/provider.dart';
 
 class ElectricityBill extends StatefulWidget {
   const ElectricityBill({super.key});
@@ -19,9 +20,11 @@ class _ElectricityBillState extends State<ElectricityBill> {
 
   @override
   Widget build(BuildContext context) {
+    final themeManager = Provider.of<ThemeManager>(context);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: themeManager.primaryColor,
         title: const Text(
           "Electricity Bill",
           style: TextStyle(fontSize: 20, color: Colors.white),
@@ -32,46 +35,46 @@ class _ElectricityBillState extends State<ElectricityBill> {
         ),
       ),
       body: Container(
-        color: Colors.white,
+        color: themeManager.backgroundColor,
         child: SingleChildScrollView(
           child: Column(
             children: [
               const SizedBox(height: 20),
               _makeContainer('https://bill.pitc.com.pk/fescobill', "FESCO",
-                  'Asset/Images/Fesco2.jpg', Colors.black),
+                  'Asset/Images/Fesco2.jpg', themeManager),
               const SizedBox(height: 20),
               _makeContainer(
                   'https://www.lesco.gov.pk:36269/Modules/CustomerBillN/CheckBill.asp',
                   "LESCO",
                   'Asset/Images/Lesco.jpg',
-                  Colors.black),
+                  themeManager),
               const SizedBox(height: 20),
               _makeContainer('https://bill.pitc.com.pk/iescobill', "IESCO",
-                  'Asset/Images/Iesco.jpg', Colors.black),
+                  'Asset/Images/Iesco.jpg', themeManager),
               const SizedBox(height: 20),
               _makeContainer(
                   'https://www.ke.com.pk/customer-services/know-your-bill/',
                   "K Electric",
                   'Asset/Images/K electric 2.png',
-                  Colors.black),
+                  themeManager),
               const SizedBox(height: 20),
               _makeContainer('https://bill.pitc.com.pk/mepcobill', "MEPCO",
-                  'Asset/Images/Mepco.jpg', Colors.black),
+                  'Asset/Images/Mepco.jpg', themeManager),
               const SizedBox(height: 20),
               _makeContainer('https://bill.pitc.com.pk/gepcobill', "GEPCO",
-                  'Asset/Images/gepco.jpeg', Colors.black),
+                  'Asset/Images/gepco.jpeg', themeManager),
               const SizedBox(height: 20),
               _makeContainer('https://bill.pitc.com.pk/pescobill', "PESCO",
-                  'Asset/Images/Pesco.jpg', Colors.black),
+                  'Asset/Images/Pesco.jpg', themeManager),
               const SizedBox(height: 20),
               _makeContainer('https://bill.pitc.com.pk/sepcobill', "SEPCO",
-                  'Asset/Images/Sepco.jpg', Colors.black),
+                  'Asset/Images/Sepco.jpg', themeManager),
               const SizedBox(height: 20),
               _makeContainer('https://bill.pitc.com.pk/qescobill/', "QESCO",
-                  'Asset/Images/Qesco.jpg', Colors.black),
+                  'Asset/Images/Qesco.jpg', themeManager),
               const SizedBox(height: 20),
               _makeContainer('https://bill.pitc.com.pk/hescobill', "HESCO",
-                  'Asset/Images/Hesco.jpg', Colors.black),
+                  'Asset/Images/Hesco.jpg', themeManager),
               const SizedBox(height: 20),
             ],
           ),
@@ -81,7 +84,7 @@ class _ElectricityBillState extends State<ElectricityBill> {
   }
 
   Widget _makeContainer(
-      String launchLinkStr, String title, String imagePath, Color borderColor) {
+      String launchLinkStr, String title, String imagePath, ThemeManager themeManager) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: GestureDetector(
@@ -89,9 +92,9 @@ class _ElectricityBillState extends State<ElectricityBill> {
         child: Container(
           height: 90,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: themeManager.cardColor,
             borderRadius: BorderRadius.circular(11),
-            border: Border.all(color: borderColor, width: 2),
+            border: Border.all(color: themeManager.textColor, width: 2),
           ),
           child: Row(
             children: [
@@ -99,19 +102,20 @@ class _ElectricityBillState extends State<ElectricityBill> {
                 height: 90,
                 width: 13,
                 decoration: BoxDecoration(
-                  color: borderColor,
+                  color: themeManager.textColor,
                   borderRadius: BorderRadius.circular(11),
                 ),
               ),
               const SizedBox(width: 20),
-              Text(
-                title,
-                style: TextStyle(
-                    fontSize: 20,
-                    color: borderColor,
-                    fontWeight: FontWeight.bold),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: themeManager.textColor,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
-              const Spacer(),
               Container(
                 height: 80,
                 width: 80,
