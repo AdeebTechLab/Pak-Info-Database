@@ -3,18 +3,18 @@ import 'package:pak_info/themeManager.dart';
 import 'package:pak_info/webViewPage.dart';
 import 'package:provider/provider.dart';
 
-class SimData extends StatefulWidget {
-  const SimData({super.key});
+class SimDataPage extends StatefulWidget {
+  const SimDataPage({super.key});
 
   @override
-  State<SimData> createState() => _SimDataState();
+  State<SimDataPage> createState() => _SimDataPageState();
 }
 
-class _SimDataState extends State<SimData> {
-  void launchLink(String link) {
+class _SimDataPageState extends State<SimDataPage> {
+  void launchLink(String url) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => WebViewPage(url: link)),
+      MaterialPageRoute(builder: (context) => WebViewPage(url: url)),
     );
   }
 
@@ -30,37 +30,29 @@ class _SimDataState extends State<SimData> {
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
         leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            size: 25,
-            color: Colors.white,
-          ),
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back, size: 25, color: Colors.white),
         ),
       ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          color: themeManager.backgroundColor,
-        ),
+        decoration: BoxDecoration(color: themeManager.backgroundColor),
         child: Column(
           children: [
             const SizedBox(height: 20),
-            _makeContainer(
-              'https://livetrackeresim.com/',
-              'Find Owner Name No:1 Server:1',
-              'Asset/Images/Sim2.jpg',
-              themeManager,
+            _buildSimCard(
+              url: 'https://livetrackeresim.com/',
+              title: 'Find Owner Name No:1 Server:1',
+              imagePath: 'Asset/Images/Sim2.jpg',
+              themeManager: themeManager,
             ),
             const SizedBox(height: 20),
-            _makeContainer(
-              'https://cnic.sims.pk/',
-              'Register Sim on CNIC Server:2',
-              'Asset/Images/Sim1.jpg',
-              themeManager,
+            _buildSimCard(
+              url: 'https://cnic.sims.pk/',
+              title: 'Register Sim on CNIC Server:2',
+              imagePath: 'Asset/Images/Sim1.jpg',
+              themeManager: themeManager,
             ),
           ],
         ),
@@ -68,30 +60,23 @@ class _SimDataState extends State<SimData> {
     );
   }
 
-  Widget _makeContainer(
-      String launchLink,
-      String title,
-      String imagePath,
-      ThemeManager themeManager,
-      ) {
+  Widget _buildSimCard({
+    required String url,
+    required String title,
+    required String imagePath,
+    required ThemeManager themeManager,
+  }) {
     return Padding(
-      padding: const EdgeInsets.only(left: 12, right: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: GestureDetector(
-        onTap: () {
-          launchLink;
-        },
+        onTap: () => launchLink(url),
         child: Container(
           width: double.infinity,
           height: 90,
           decoration: BoxDecoration(
             color: themeManager.cardColor,
             borderRadius: BorderRadius.circular(11),
-            border: Border(
-              top: BorderSide(color: themeManager.primaryColor, width: 2),
-              right: BorderSide(color: themeManager.primaryColor, width: 2),
-              bottom: BorderSide(color: themeManager.primaryColor, width: 2),
-              left: BorderSide(color: themeManager.primaryColor),
-            ),
+            border: Border.all(color: themeManager.primaryColor, width: 2),
           ),
           child: Row(
             children: [
@@ -108,7 +93,7 @@ class _SimDataState extends State<SimData> {
                 child: Text(
                   title,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 14,
                     color: themeManager.textColor,
                     fontWeight: FontWeight.bold,
                   ),

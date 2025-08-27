@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Pak Info Database V 1.0.0",
+          "Pak Info Database V 0.3.0",
           style: TextStyle(fontSize: 20),
         ),
         actions: [
@@ -145,34 +145,34 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
-            _makeContainer("Asset/Images/sim.jpg", "Sim Owner info", const SimData(), themeManager),
+            _makeContainer("Asset/button/sim.jpg", "Sim Owner info", const SimDataPage(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/Images/Driving Licese.png", "Driving License info", const DrivingLicense(), themeManager),
+            _makeContainer("Asset/button/Driving Licese.png", "Driving License info", const DrivingLicense(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/Images/online fir.jpg", "Online FIR info", const OnlineFire(), themeManager),
+            _makeContainer("Asset/button/online fir.jpg", "Online FIR info", const OnlineFire(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/Images/ntn.jpg", "NTN Inquiry info", const CheckFBR(), themeManager),
+            _makeContainer("Asset/button/ntn.jpg", "NTN Inquiry info", const CheckFBR(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/Images/Vehicle.png.png", "Vehicle Verification info", const CheckVehicleverification(), themeManager),
+            _makeContainer("Asset/button/Vehicle.png.png", "Vehicle Verification info", const CheckVehicleverification(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/Images/Passport 2.jpg", "Passport Inquiry info", const CheckPassport(), themeManager),
+            _makeContainer("Asset/button/Passport 2.jpg", "Passport Inquiry info", const CheckPassport(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/Images/ElectricBill.jpg", "Electricity Bill info", const ElectricityBill(), themeManager),
+            _makeContainer("Asset/button/ElectricBill.jpg", "Electricity Bill info", const ElectricityBill(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/Images/Suigas.jpg", "Sui Gas Bill info", const SuigasBill(), themeManager),
+            _makeContainer("Asset/button/Suigas.jpg", "Sui Gas Bill info", const SuigasBill(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/Images/ptcl.jpg", "Internet Bill info", const PtclBill(), themeManager),
+            _makeContainer("Asset/button/ptcl.jpg", "Internet Bill info", const PtclBill(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/Images/package tracking.jpg", "Parcel Tracking info", const CheckTrackingparsel(), themeManager),
+            _makeContainer("Asset/button/package tracking.jpg", "Parcel Tracking info", const CheckTrackingparsel(), themeManager),
           ],
         ),
       ),
@@ -185,7 +185,7 @@ class _HomeState extends State<Home> {
       {
         'imagePath': "Asset/Images/sim.jpg",
         'title': "Sim Owner info",
-        'page': const SimData(),
+        'page': const SimDataPage(),
       },
       {
         'imagePath': "Asset/Images/Driving Licese.png",

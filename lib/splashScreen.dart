@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pak_info/themeManager.dart';
-
 import 'HomePage.dart';
 
 class Splashscreen extends StatefulWidget {
@@ -45,7 +44,9 @@ class _SplashscreenState extends State<Splashscreen>
 
     Future.delayed(const Duration(seconds: 4), () {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const Home()));
+        context,
+        MaterialPageRoute(builder: (context) => const Home()),
+      );
     });
   }
 
@@ -72,29 +73,14 @@ class _SplashscreenState extends State<Splashscreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
+                    Image.asset(
+                      'Asset/Images/logo.png',
                       width: 130,
                       height: 130,
-                      decoration: BoxDecoration(
-                        color: themeManager.primaryColor,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: themeManager.primaryColor.withOpacity(0.4),
-                            blurRadius: 20,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-                      child: Image.asset(
-                        'Asset/Images/logo.png',
-                        width: 130,
-                        height: 130,
-                      ),
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'AT Data Base',
+                      'Pak info DataBase',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w600,
@@ -104,7 +90,7 @@ class _SplashscreenState extends State<Splashscreen>
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Your One Tap Service',
+                      'All In One',
                       style: TextStyle(
                         fontSize: 16,
                         color: themeManager.textColor.withOpacity(0.7),
@@ -112,6 +98,12 @@ class _SplashscreenState extends State<Splashscreen>
                       ),
                     ),
                     const SizedBox(height: 40),
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        themeManager.primaryColor,
+                      ),
+                      strokeWidth: 3.5,
+                    ),
                   ],
                 ),
               ),
