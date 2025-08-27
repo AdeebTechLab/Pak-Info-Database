@@ -34,7 +34,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "Asset/Images/logo.png"   # 👈 apna app icon ka image yahan rakho
+  image_path: "Asset/button/logo.png"   # 👈 apna app icon ka image yahan rakho
   min_sdk_android: 21
 
 flutter:
