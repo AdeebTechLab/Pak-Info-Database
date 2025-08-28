@@ -183,52 +183,52 @@ class _HomeState extends State<Home> {
   List<Map<String, dynamic>> _getMenuItems() {
     return [
       {
-        'imagePath': "Asset/Images/sim.jpg",
+        'imagePath': "Asset/button/sim.jpg",
         'title': "Sim Owner info",
         'page': const SimDataPage(),
       },
       {
-        'imagePath': "Asset/Images/Driving Licese.png",
+        'imagePath': "Asset/button/Driving Licese.png",
         'title': "Driving License info",
         'page': const DrivingLicense(),
       },
       {
-        'imagePath': "Asset/Images/online fir.jpg",
+        'imagePath': "Asset/button/online fir.jpg",
         'title': "Online FIR info",
         'page': const OnlineFire(),
       },
       {
-        'imagePath': "Asset/Images/ntn.jpg",
+        'imagePath': "Asset/button/ntn.jpg",
         'title': "NTN Inquiry info",
         'page': const CheckFBR(),
       },
       {
-        'imagePath': "Asset/Images/Vehicle.png.png",
+        'imagePath': "Asset/button/Vehicle.png.png",
         'title': "Vehicle Verification info",
         'page': const CheckVehicleverification(),
       },
       {
-        'imagePath': "Asset/Images/Passport 2.jpg",
+        'imagePath': "Asset/button/Passport 2.jpg",
         'title': "Passport Inquiry info",
         'page': const CheckPassport(),
       },
       {
-        'imagePath': "Asset/Images/ElectricBill.jpg",
+        'imagePath': "Asset/button/ElectricBill.jpg",
         'title': "Electricity Bill info",
         'page': const ElectricityBill(),
       },
       {
-        'imagePath': "Asset/Images/Suigas.jpg",
+        'imagePath': "Asset/button/Suigas.jpg",
         'title': "Sui Gas Bill info",
         'page': const SuigasBill(),
       },
       {
-        'imagePath': "Asset/Images/ptcl.jpg",
+        'imagePath': "Asset/button/ptcl.jpg",
         'title': "Internet Bill info",
         'page': const PtclBill(),
       },
       {
-        'imagePath': "Asset/Images/package tracking.jpg",
+        'imagePath': "Asset/button/package tracking.jpg",
         'title': "Parcel Tracking info",
         'page': const CheckTrackingparsel(),
       },
@@ -289,63 +289,72 @@ class _HomeState extends State<Home> {
     );
   }
 
-  /// Reusable Card Widget for Grid View
   Widget _makeGridContainer(String imagePath, String imageTitle, Widget targetPage, ThemeManager themeManager) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => targetPage));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => targetPage));
       },
-      child: Card(
-        elevation: 8,
-        shadowColor: Colors.black,
-        child: Column(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Container(
+      child: SizedBox(
+        height: 180,
+        width: 160, // You can tweak this width as needed
+        child: Card(
+          elevation: 6,
+          shadowColor: Colors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 140,
                 width: double.infinity,
-                decoration: BoxDecoration(
+                child: ClipRRect(
                   borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
+                    topLeft: Radius.circular(14),
+                    topRight: Radius.circular(14),
                   ),
-                  image: DecorationImage(
-                    image: AssetImage(imagePath),
-                    fit: BoxFit.fill,
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                padding: const EdgeInsets.all(8),
+              Container(
+                height: 40,
+                padding: const EdgeInsets.symmetric(horizontal: 6),
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: themeManager.containerColor,
                   borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(16),
-                    bottomRight: Radius.circular(16),
+                    bottomLeft: Radius.circular(14),
+                    bottomRight: Radius.circular(14),
                   ),
                 ),
                 child: Center(
                   child: Text(
                     imageTitle,
                     style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+
+
+
+
+
+
+
 }
