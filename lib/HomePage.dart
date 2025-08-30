@@ -148,7 +148,7 @@ class _HomeState extends State<Home> {
             _makeContainer("Asset/button/sim.jpg", "Sim Owner info", const SimDataPage(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/button/Driving Licese.png", "Driving License info", const DrivingLicense(), themeManager),
+            _makeContainer("Asset/button/Driving Licese.jpg", "Driving License info", const DrivingLicense(), themeManager),
             const SizedBox(height: 20),
 
             _makeContainer("Asset/button/online fir.jpg", "Online FIR info", const OnlineFire(), themeManager),
@@ -157,7 +157,7 @@ class _HomeState extends State<Home> {
             _makeContainer("Asset/button/ntn.jpg", "NTN Inquiry info", const CheckFBR(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/button/Vehicle.png.png", "Vehicle Verification info", const CheckVehicleverification(), themeManager),
+            _makeContainer("Asset/button/Vehicle.jpg", "Vehicle Verification info", const CheckVehicleverification(), themeManager),
             const SizedBox(height: 20),
 
             _makeContainer("Asset/button/Passport 2.jpg", "Passport Inquiry info", const CheckPassport(), themeManager),
@@ -188,7 +188,7 @@ class _HomeState extends State<Home> {
         'page': const SimDataPage(),
       },
       {
-        'imagePath': "Asset/button/Driving Licese.png",
+        'imagePath': "Asset/button/Driving Licese.jpg",
         'title': "Driving License info",
         'page': const DrivingLicense(),
       },
@@ -203,7 +203,7 @@ class _HomeState extends State<Home> {
         'page': const CheckFBR(),
       },
       {
-        'imagePath': "Asset/button/Vehicle.png.png",
+        'imagePath': "Asset/button/Vehicle.jpg",
         'title': "Vehicle Verification info",
         'page': const CheckVehicleverification(),
       },
