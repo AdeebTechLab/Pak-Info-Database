@@ -77,7 +77,8 @@ class _HomeState extends State<Home> {
               PopupMenuItem<String>(
                 value: 'About',
                 child: ListTile(
-                  leading: Icon(Icons.info, color: themeManager.textColor, size: 25),
+                  leading:
+                  Icon(Icons.info, color: themeManager.textColor, size: 25),
                   title: Text(
                     "App Update",
                     style: TextStyle(
@@ -107,7 +108,9 @@ class _HomeState extends State<Home> {
       ),
 
       /// BODY START
-      body: useGridLayout ? _buildGridView(themeManager, crossAxisCount) : _buildListView(themeManager),
+      body: useGridLayout
+          ? _buildGridView(themeManager, crossAxisCount)
+          : _buildListView(themeManager),
     );
   }
 
@@ -120,7 +123,8 @@ class _HomeState extends State<Home> {
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: crossAxisCount,
-          childAspectRatio: 0.75,
+          childAspectRatio:
+          0.9, // Card ka aspect ratio control karta hai (1.0 square hota hai)
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
         ),
@@ -145,34 +149,46 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
-            _makeContainer("Asset/button/sim.jpg", "Sim Owner info", const SimDataPage(), themeManager),
+            _makeContainer("Asset/button/sim.jpg", "Sim Owner info",
+                const SimDataPage(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/button/Driving Licese.jpg", "Driving License info", const DrivingLicense(), themeManager),
+            _makeContainer("Asset/button/Driving Licese.jpg",
+                "Driving License info", const DrivingLicense(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/button/online fir.jpg", "Online FIR info", const OnlineFire(), themeManager),
+            _makeContainer("Asset/button/online fir.jpg", "Online FIR info",
+                const OnlineFire(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/button/ntn.jpg", "NTN Inquiry info", const CheckFBR(), themeManager),
+            _makeContainer("Asset/button/ntn.jpg", "NTN Inquiry info",
+                const CheckFBR(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/button/Vehicle.jpg", "Vehicle Verification info", const CheckVehicleverification(), themeManager),
+            _makeContainer("Asset/button/Vehicle.jpg",
+                "Vehicle Verification info", const CheckVehicleverification(),
+                themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/button/Passport 2.jpg", "Passport Inquiry info", const CheckPassport(), themeManager),
+            _makeContainer("Asset/button/Passport 2.jpg",
+                "Passport Inquiry info", const CheckPassport(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/button/ElectricBill.jpg", "Electricity Bill info", const ElectricityBill(), themeManager),
+            _makeContainer("Asset/button/ElectricBill.jpg",
+                "Electricity Bill info", const ElectricityBill(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/button/Suigas.jpg", "Sui Gas Bill info", const SuigasBill(), themeManager),
+            _makeContainer("Asset/button/Suigas.jpg", "Sui Gas Bill info",
+                const SuigasBill(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/button/ptcl.jpg", "Internet Bill info", const PtclBill(), themeManager),
+            _makeContainer("Asset/button/ptcl.jpg", "Internet Bill info",
+                const PtclBill(), themeManager),
             const SizedBox(height: 20),
 
-            _makeContainer("Asset/button/package tracking.jpg", "Parcel Tracking info", const CheckTrackingparsel(), themeManager),
+            _makeContainer("Asset/button/package tracking.jpg",
+                "Parcel Tracking info", const CheckTrackingparsel(),
+                themeManager),
           ],
         ),
       ),
@@ -236,7 +252,8 @@ class _HomeState extends State<Home> {
   }
 
   /// Reusable Card Widget for List View
-  Widget _makeContainer(String imagePath, String imageTitle, Widget targetPage, ThemeManager themeManager) {
+  Widget _makeContainer(String imagePath, String imageTitle, Widget targetPage,
+      ThemeManager themeManager) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -289,14 +306,17 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _makeGridContainer(String imagePath, String imageTitle, Widget targetPage, ThemeManager themeManager) {
+  /// Reusable Card Widget for Grid View
+  Widget _makeGridContainer(String imagePath, String imageTitle,
+      Widget targetPage, ThemeManager themeManager) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => targetPage));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => targetPage));
       },
       child: SizedBox(
-        height: 180,
-        width: 160, // You can tweak this width as needed
+        height: 160,
+        width: 140, // Fixed size
         child: Card(
           elevation: 6,
           shadowColor: Colors.black,
@@ -306,7 +326,7 @@ class _HomeState extends State<Home> {
           child: Column(
             children: [
               SizedBox(
-                height: 140,
+                height: 110,
                 width: double.infinity,
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
@@ -334,7 +354,7 @@ class _HomeState extends State<Home> {
                   child: Text(
                     imageTitle,
                     style: const TextStyle(
-                      fontSize: 14,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -350,11 +370,4 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
-
-
-
-
-
-
 }
