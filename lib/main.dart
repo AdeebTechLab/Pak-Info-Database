@@ -1,5 +1,4 @@
 // main.dart
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pak_info/splashScreen.dart';
 import 'package:pak_info/themeManager.dart';
