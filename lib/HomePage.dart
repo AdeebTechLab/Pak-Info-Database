@@ -42,29 +42,48 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final themeManager = Provider.of<ThemeManager>(context);
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
-    // Determine if we should use grid layout (for tablets/wider screens)
+    // More responsive breakpoints
     final bool useGridLayout = screenWidth > 600;
-    final int crossAxisCount = screenWidth > 900 ? 4 : 3;
+    int crossAxisCount;
+    double childAspectRatio;
+
+    if (screenWidth > 1200) {
+      crossAxisCount = 5;
+      childAspectRatio = 0.8;
+    } else if (screenWidth > 900) {
+      crossAxisCount = 4;
+      childAspectRatio = 0.85;
+    } else if (screenWidth > 700) {
+      crossAxisCount = 3;
+      childAspectRatio = 0.9;
+    } else if (screenWidth > 600) {
+      crossAxisCount = 2;
+      childAspectRatio = 0.95;
+    } else {
+      crossAxisCount = 2;
+      childAspectRatio = 1.0;
+    }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           "Pak Info Database V 0.3.0",
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 16),
         ),
         actions: [
           IconButton(
             icon: Icon(
               themeManager.isDarkMode ? Icons.light_mode : Icons.dark_mode,
-              size: 28,
+              size: 24,
             ),
             onPressed: () => themeManager.toggleTheme(),
           ),
           PopupMenuButton<String>(
             icon: const Icon(
               Icons.menu,
-              size: 28,
+              size: 24,
             ),
             onSelected: (String value) {
               if (value == 'About') {
@@ -109,24 +128,30 @@ class _HomeState extends State<Home> {
 
       /// BODY START
       body: useGridLayout
-          ? _buildGridView(themeManager, crossAxisCount)
+          ? _buildGridView(themeManager, crossAxisCount, childAspectRatio, screenWidth)
           : _buildListView(themeManager),
     );
   }
 
   /// Build Grid View for wider screens
-  Widget _buildGridView(ThemeManager themeManager, int crossAxisCount) {
+  Widget _buildGridView(ThemeManager themeManager, int crossAxisCount, double childAspectRatio, double screenWidth) {
     final items = _getMenuItems();
 
+    // Calculate responsive padding and spacing
+    final double padding = screenWidth > 1200 ? 20 : screenWidth > 900 ? 16 : 12;
+    final double spacing = screenWidth > 1200 ? 16 : screenWidth > 900 ? 14 : 12;
+
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: EdgeInsets.all(padding),
       child: GridView.builder(
+        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        physics: const AlwaysScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: crossAxisCount,
-          childAspectRatio:
-          0.9, // Card ka aspect ratio control karta hai (1.0 square hota hai)
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
+          childAspectRatio: childAspectRatio,
+          crossAxisSpacing: spacing,
+          mainAxisSpacing: spacing,
         ),
         itemCount: items.length,
         itemBuilder: (context, index) {
@@ -136,6 +161,7 @@ class _HomeState extends State<Home> {
             item['title']!,
             item['page']! as Widget,
             themeManager,
+            screenWidth,
           );
         },
       ),
@@ -306,68 +332,102 @@ class _HomeState extends State<Home> {
     );
   }
 
-  /// Reusable Card Widget for Grid View
+  /// Reusable Card Widget for Grid View - Made Responsive
   Widget _makeGridContainer(String imagePath, String imageTitle,
-      Widget targetPage, ThemeManager themeManager) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => targetPage));
-      },
-      child: SizedBox(
-        height: 160,
-        width: 140, // Fixed size
-        child: Card(
-          elevation: 6,
-          shadowColor: Colors.black,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 110,
-                width: double.infinity,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(14),
-                    topRight: Radius.circular(14),
-                  ),
-                  child: Image.asset(
-                    imagePath,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Container(
-                height: 40,
-                padding: const EdgeInsets.symmetric(horizontal: 6),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: themeManager.containerColor,
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(14),
-                    bottomRight: Radius.circular(14),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    imageTitle,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+      Widget targetPage, ThemeManager themeManager, double screenWidth) {
+
+    // Calculate responsive values based on screen width
+    final double fontSize = screenWidth > 1200 ? 14 : screenWidth > 900 ? 13 : 12;
+    final double borderRadius = screenWidth > 900 ? 16 : 14;
+    final double elevation = screenWidth > 900 ? 8 : 6;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Calculate image height as percentage of available height
+        final double availableHeight = constraints.maxHeight;
+        final double imageHeight = availableHeight * 0.75; // 75% for image
+        final double titleHeight = availableHeight * 0.25; // 25% for title
+
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => targetPage));
+          },
+          child: Card(
+            elevation: elevation,
+            shadowColor: Colors.black.withOpacity(0.3),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(borderRadius),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  flex: 3, // Takes 3/4 of available space
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(borderRadius),
+                        topRight: Radius.circular(borderRadius),
+                      ),
                     ),
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(borderRadius),
+                        topRight: Radius.circular(borderRadius),
+                      ),
+                      child: Image.asset(
+                        imagePath,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey[300],
+                            child: const Icon(
+                              Icons.image_not_supported,
+                              color: Colors.grey,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Expanded(
+                  flex: 1, // Takes 1/4 of available space
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth > 900 ? 12 : 8,
+                      vertical: screenWidth > 900 ? 8 : 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: themeManager.containerColor,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(borderRadius),
+                        bottomRight: Radius.circular(borderRadius),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        imageTitle,
+                        style: TextStyle(
+                          fontSize: fontSize,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
