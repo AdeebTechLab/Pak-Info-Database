@@ -32,6 +32,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
 
 flutter_icons:
+  web: true
   android: true
   ios: true
   image_path: "Asset/Images/logo.png"   # 👈 apna app icon ka image yahan rakho
